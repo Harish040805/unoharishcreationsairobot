@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="icon" href="7db2e199-c244-4e17-ae27-83005b93399d.jpg" type="image/png">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>UNO - Harish Creations Robot</title>
+<style>
+:root {
+    --primary-color: #333;
+    --secondary-color: #ccc;
+    --background-color: #f0f0f0;
+    --accent-color: #ff9900;
+    --dark-gray: #606060;
+    --light-gray: #ccc;
+    --maroon: maroon;
+    --gold: gold;
+    --firebrick: firebrick;
+}
+body {
+    margin: 0;
+    background-color: #fff;
+    background-size: cover;
+    background-position: center top;
+    background-repeat: repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+#splash-screen img {
+    width: 200px;
+    height: 200px;
+}
+.robot-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.robot-body.weight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+.robot-torso {
+    width: 250px;
+    height: 300px;
+    background: linear-gradient(to bottom, #89cff0, #d5f3fe);
+    border-radius: 10px;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+}
+.robot-head {
+    width: 120px;
+    height: 100px;
+    background: radial-gradient(circle, #fff 15%, transparent 40%),  #89cff0;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom: 12px solid #666;
+}
+.robot-eyes {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: space-between;
+    width: 80px;
+}
+.eye {
+    width: 24px;
+    height: 24px;
+    background: radial-gradient(circle, white 15%, transparent 40%), #cc5;
+    border-radius: 50%;
+    animation: blink 0.5s infinite;
+}
+@keyframes blink {
+    50% {
+        background: radial-gradient(circle, red 15%, transparent 40%), #cc5;
+    }
+}
+.robot-arms, .robot-legs {
+    display: flex;
+    justify-content: space-between;
+    width: 180px;
+    position: absolute;
+}
+.robot-arms {
+    top: 80px;
+}
+
+.robot-legs {
+    top: 320px;
+}
+.robot-arm, .robot-leg {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(to bottom, #bbb, #000);
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+.robot-arm::before, .robot-leg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 70%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #666;
+    border-radius: 50%;
+    box-shadow: 0 0 3px #aaa;
+}
+.robot-arm::after, .robot-leg::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 70%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #666;
+    border-radius: 50%;
+    box-shadow: 0 0 3px #aaa;
+}
+.left-arm, .left-leg {
+    left: -120px;
+}
+
+.right-arm, .right-leg {
+    right: -120px;
+}
+.instruction-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 10%;
+  height: 25%;
+  position: fixed; 
+  z-index: 10; 
+  background: #4682B4; /* or any other blue color */
+  border-radius: 10%;
+  top: 65%;
+  left: 85%;
+}
+.item, .blank {
+  width: 32%;
+  aspect-ratio: 1; 
+  margin-top: 2%;
+  margin-bottom: 2%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.item {
+  background-color: #87CEEB; 
+}
+.item:hover{
+  background-color: #ADD8E6; 
+}
+.robot-text {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  z-index: 5000;
+}
+.instruction-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  background-color: #ADD8E6;
+  padding: 10px;
+  border: 1px solid #ddd;
+  width: 250px;
+  font-size: 14px !important;
+  transform: scale(1);
+  transform-origin: 0 0;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  text-size-adjust: none;
+}
+	    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      right: 0; 
+      width: 35%; 
+      height: 92%;
+      overflow: auto;
+    }
+    .modal-content {
+      background-color: maroon;
+      margin: 0 0 0 0; 
+      padding: 10%;
+      border: 1px solid #888;
+      width: 80%; 
+      height: 100%;  
+      max-height: 100%;
+	  overflow-x: auto;
+      overflow-y: auto; 
+    }
+    @media screen and (orientation: portrait) {
+      .modal-content {
+        width: 80%; 
+        max-height: 30%; 
+        margin: 0 0 0 0;
+      }
+      .resp-container {
+        padding-top: 0%;
+		width: 40%;
+		height: 80%;
+      }
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    #metaAIButton {
+      background-color: maroon; 
+      color: white; 
+      padding: 10px 20px; 
+      border: none;
+      cursor: pointer; 
+    }
+    #metaAIButton:hover {
+      background-color: firebrick; 
+    }
+    .bottom-taskbar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: gold;
+      text-align: center;
+      padding: 10px 0;
+    }
+    .bottom-taskbar button {
+      margin: auto;
+    }
+    .resp-container {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+	  height: 30%;
+      padding-top: 100%; 
+    }
+    .resp-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80%;
+      border: none;
+    }
+    </style>
+		<style>
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0; 
+  width: 35%; 
+  height: 92%;
+  overflow: auto;
+}
+.modal-content {
+background-color: #2f4f7f;
+  margin: 0 0 0 0; 
+  padding: 10%;
+  border: 1px solid #888;
+  width: 80%; 
+  height: 100%;  
+  max-height: 100%;
+  overflow-x: auto;
+  overflow-y: auto; 
+}
+@media screen and (orientation: portrait) {
+  .modal-content {
+    width: 80%; 
+    max-height: 30%; 
+    margin: 0 0 0 0;
+  }
+  .resp-container {
+    padding-top: 0%;
+    width: 40%;
+    height: 80%;
+  }
+}
+.close {
+  color: #ff0000;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+.close:hover,
+.close:focus {
+  color: #8b0000;
+  text-decoration: none;
+  cursor: pointer;
+}
+#metaAIButton {
+  background-color: #29b7f0; 
+  color: #fff; 
+  padding: 10px 20px; 
+  border: none;
+  cursor: pointer; 
+}
+#metaAIButton:hover {
+  background-color: #11a9f0; 
+}
+.bottom-taskbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #89cff0; 
+  text-align: center;
+  padding: 10px 0;
+}
+.bottom-taskbar button {
+  margin: auto;
+}
+.resp-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 30%;
+  padding-top: 100%; 
+}
+.resp-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80%;
+  border: none;
+}
+.robot-cylinder {
+  width: 200px;
+  height: 30px;
+  background: linear-gradient(to bottom, #666, #000);
+  border-radius: 10%;
+  position: absolute;
+  top: 300px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0.1;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.robot-turbo {
+  top: 630px;
+  left: 0%;
+  transform: translateX(-50%);
+  z-index: 900;
+}
+.turbo-indicator {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(#87CEEB, #4682B4, #1E90FF); 
+  opacity: 0;
+  animation: water-pulse 2s infinite;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  top: -130px;
+  position: relative;
+  left: 35px
+}
+
+.turbo-active {
+  opacity: 1;
+  animation: turbo-flicker 2s infinite;
+}
+
+@keyframes water-pulse {
+  0% {
+    transform: rotate(45deg) scale(1);
+  }
+  50% {
+    transform: rotate(45deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(45deg) scale(1);
+  }
+}
+
+@keyframes turbo-flicker {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.7;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  60% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+.bubble-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: #ADD8E6;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #fff;
+  animation: move-bubble infinite;
+}
+
+@keyframes move-bubble {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(var(--x), var(--y));
+  }
+}
+		</style>
+</head>
+<body style="font-family: 'Courier New', monospace;">
+	<div id="splash-screen">
+        <img src="7db2e199-c244-4e17-ae27-83005b93399d.jpg" type="image/png" style="border-radius: 50%;" alt="Splash Screen Image">
+    </div>
+	<script>
+setTimeout(() => {
+    document.getElementById('splash-screen').style.display = 'none';
+}, 3000);
+	</script>
+	<center>
+    <h1 style="color: #FFFFFF; background-color: #ADD8E6; padding: 10px; border-radius: 5px; display: inline-block;">Harish Creations Robot</h1><br>
+    <h2 style="color: #ADD8E6; background-color: #FFFFFF; padding: 5px; border: 1px solid #808080; border-radius: 5px; display: inline-block;">By Harish Creations</h2>
+	</center>
+<div class="robot-body">
+    <div class="robot-head">
+        <div class="robot-eyes">
+            <div class="eye"></div>
+            <div class="eye"></div>
+        </div>
+    </div>
+<div class="robot-arms">
+    <div class="robot-arm left-arm"></div>
+    <div class="robot-arm right-arm"></div>
+</div>
+<div class="robot-legs">
+    <div class="robot-leg left-leg"></div>
+    <div class="robot-leg right-leg"></div>
+</div>
+    <div class="robot-torso" style="z-index: 2000;">
+        <span class="robot-text" style="margin-bottom: 30px;">
+		<br><br><br><br>
+			<center>
+			<div style="object-fit: contain; width: 100px; height: 100px;">
+					<img src="7db2e199-c244-4e17-ae27-83005b93399d.jpg"  type="image/png" style="width: 60%; height: 60%; border-radius: 50%;"><br>Harish Creations Robot
+			</div>
+			</center>
+	        
+        </span>
+		<br><br><br>
+<div id="mechanical-wheel-container"
+  style="position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 1; margin-top: 40px;">
+  <div class="bubble-container">
+    <!-- bubbles will be created dynamically -->
+  </div>
+</div>
+<script>
+// Create bubbles
+const bubbleContainer = document.querySelector('.bubble-container');
+
+for (let i = 0; i < 20; i++) {
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.style.width = `${Math.random() * 10 + 5}px`;
+  bubble.style.height = `${Math.random() * 10 + 5}px`;
+  bubble.style.top = `${Math.random() * 90 + 5}%`;
+  bubble.style.left = `${Math.random() * 90 + 5}%`;
+  bubble.style.setProperty('--x', `${Math.random() * 100 - 50}px`);
+  bubble.style.setProperty('--y', `${Math.random() * 100 - 50}px`);
+  bubble.style.animationDuration = `${Math.random() * 5 + 2}s`;
+  bubbleContainer.appendChild(bubble);
+}
+</script>
+    <style>
+.bubble-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: #ADD8E6;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #fff;
+  animation: move-bubble infinite;
+}
+
+@keyframes move-bubble {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(var(--x), var(--y));
+  }
+}
+    </style>
+		<div class="vertical-text" style="position: absolute; top: 0; left: 0; font-size: 48px; font-weight: bold; color: #000; text-align: center; line-height: 1.2; margin-left: 5px;">
+			U<br>N<br>O
+		</div>
+			<div class="robot-cylinder"></div>
+	</div>
+<div class="robot-turbo" style="position: relative; width: 100%; height: 100%; display: flex; justify-content: center;">
+  <div class="turbo-indicator"></div>
+</div>
+<script>
+const turboButton = document.getElementById('turbo-button');
+const turboIndicator = document.querySelector('.turbo-indicator');
+
+turboButton.addEventListener('click', () => {
+  turboIndicator.classList.add('turbo-active');
+  setTimeout(() => {
+    turboIndicator.classList.remove('turbo-active');
+  }, 5000); 
+});
+</script>
+    </div>
+</div>
+<div class="instruction-box">
+<center><h4>Control Panel Instructions</h4></center>
+<ul>
+<li><strong>↑</strong> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : Move Forward</li>
+<li><strong>←</strong> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : Move Left</li>
+<li><strong>→</strong> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : Move Right</li>
+<li><strong>↓</strong> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp : Move Backward</li>
+<li><strong>Stop</strong> (<span>&#x25CB;</span>) &nbsp : Reset Position</li>
+</ul>
+</div>
+    <div class="instruction-container">
+        <div class="blank"></div>
+        <div class="item" id="forward">↑</div>
+        <div class="blank"></div>
+        <div class="item" id="left">←</div>
+		<div class="item" id="stop" onmouseover="showMessage()" onmouseout="hideMessage()">&#x25CB;</div>
+		<span id="message" style="display:none; position:absolute; z-index:1; background-color:#fff; padding:47px; border:1px solid #ddd; border-radius:5px; top: 70%; left: 80%; transform: translate(-50%, -150%);">Stop Button Resets the position of the Robot</span>
+		<script>
+		function showMessage() {
+			document.getElementById("message").style.display = "block";
+		}
+		function hideMessage() {
+			document.getElementById("message").style.display = "none";
+		}
+		</script>
+        <div class="item" id="right">→</div>
+        <div class="blank"></div>
+        <div class="item" id="backward">↓</div>
+        <div class="blank">
+        </div>
+    </div>
+    <script>
+	    alert("For optimal experience, this webpage is best viewed on desktops and PCs.");
+document.addEventListener('DOMContentLoaded', () => {
+  const robotBody = document.querySelector('.robot-body');
+  let x = 0;
+  let y = 0;
+  let rotation = 0;
+  const movementIncrement = 10;
+  const degreeRotationIncrement = 10;
+  let movingForward = false;
+  let movingBackward = false;
+  let animationFrameId = null;
+document.addEventListener('keydown', (e) => {
+  switch (e.key) {
+    case 'ArrowUp':
+      movingForward = true;
+      break;
+    case 'ArrowDown':
+      movingBackward = true;
+      break;
+    case 'ArrowLeft':
+      buttonRotatingLeft = true; 
+      break;
+    case 'ArrowRight':
+      buttonRotatingRight = true; 
+      break;
+  }
+});
+document.addEventListener('keyup', (e) => {
+  switch (e.key) {
+    case 'ArrowUp':
+      movingForward = false;
+      break;
+    case 'ArrowDown':
+      movingBackward = false;
+      break;
+    case 'ArrowLeft':
+      buttonRotatingLeft = false; 
+      break;
+    case 'ArrowRight':
+      buttonRotatingRight = false; 
+      break;
+  }
+});
+function animate() {
+  if (movingForward || buttonMovingForward) {
+    x += movementIncrement * Math.sin(rotation * Math.PI / 180);
+    y -= movementIncrement * Math.cos(rotation * Math.PI / 180);
+  } else if (movingBackward || buttonMovingBackward) {
+    x -= movementIncrement * Math.sin(rotation * Math.PI / 180);
+    y += movementIncrement * Math.cos(rotation * Math.PI / 180);
+  }
+  if (buttonRotatingLeft) {
+    rotation -= degreeRotationIncrement / 8; 
+  } else if (buttonRotatingRight) {
+    rotation += degreeRotationIncrement / 8; 
+  }
+  robotBody.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+  animationFrameId = requestAnimationFrame(animate);
+}
+  animationFrameId = requestAnimationFrame(animate);
+const forwardButton = document.getElementById('forward');
+const backwardButton = document.getElementById('backward');
+const leftButton = document.getElementById('left');
+const rightButton = document.getElementById('right');
+const stopButton = document.getElementById('stop');
+let buttonMovingForward = false;
+let buttonMovingBackward = false;
+let buttonRotatingLeft = false;
+let buttonRotatingRight = false;
+forwardButton.addEventListener('mousedown', () => {
+  buttonMovingForward = true;
+});
+forwardButton.addEventListener('mouseup', () => {
+  buttonMovingForward = false;
+});
+forwardButton.addEventListener('mouseout', () => {
+  buttonMovingForward = false;
+});
+backwardButton.addEventListener('mousedown', () => {
+  buttonMovingBackward = true;
+});
+backwardButton.addEventListener('mouseup', () => {
+  buttonMovingBackward = false;
+});
+backwardButton.addEventListener('mouseout', () => {
+  buttonMovingBackward = false;
+});
+leftButton.addEventListener('mousedown', () => {
+  buttonRotatingLeft = true;
+});
+leftButton.addEventListener('mouseup', () => {
+  buttonRotatingLeft = false;
+});
+leftButton.addEventListener('mouseout', () => {
+  buttonRotatingLeft = false;
+});
+rightButton.addEventListener('mousedown', () => {
+  buttonRotatingRight = true;
+});
+rightButton.addEventListener('mouseup', () => {
+  buttonRotatingRight = false;
+});
+rightButton.addEventListener('mouseout', () => {
+  buttonRotatingRight = false;
+});
+stopButton.addEventListener('click', () => {
+  movingForward = false;
+  movingBackward = false;
+  buttonMovingForward = false;
+  buttonMovingBackward = false;
+  buttonRotatingLeft = false;
+  buttonRotatingRight = false;
+  cancelAnimationFrame(animationFrameId);
+  animationFrameId = null; 
+  x = 0;
+  y = 0;
+  rotation = 0;
+  robotBody.style.transform = `translate(${x}px, ${y}px) rotate(${rotation}deg)`;
+  animationFrameId = requestAnimationFrame(animate);
+});
+}); 
+const turboIndicators = document.querySelectorAll('.turbo-indicator');
+function startTurbo() {
+  turboIndicators.forEach((indicator) => {
+    indicator.classList.add('turbo-active');
+  });
+}
+function stopTurbo() {
+  turboIndicators.forEach((indicator) => {
+    indicator.classList.remove('turbo-active');
+  });
+}
+const controlButtons = document.querySelectorAll('.item');
+controlButtons.forEach((button) => {
+  button.addEventListener('mousedown', startTurbo);
+  button.addEventListener('mouseup', stopTurbo);
+  button.addEventListener('mouseout', stopTurbo);
+});
+   </script>
+  <div class="bottom-taskbar">
+    <button id="metaAIButton" onclick="openModal()">Ask Perplexity Labs AI</button>
+  </div>
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <div class="resp-container">
+        <iframe id="metaAIIFrame" src="https://labs.perplexity.ai/" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+  <script>
+    var modal = document.getElementById("myModal");
+    function openModal() {
+      modal.style.display = "block";
+    }
+    function closeModal() {
+      modal.style.display = "none";
+    }
+    var iframe = document.getElementById("metaAIIFrame");
+    iframe.onload = function() {
+        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+    };
+  </script>
+</body>
+</html>
